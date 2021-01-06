@@ -17,7 +17,10 @@ class MovieCard extends StatelessWidget {
             bottom: 0,
             child: _bottomCard(),
           ),
-          Positioned(left: Get.width * .05, child: _movieCover()),
+          Positioned(
+            left: Get.width * .05,
+            child: _movieCover(),
+          ),
         ],
       ),
     );
@@ -71,6 +74,9 @@ class MovieCard extends StatelessWidget {
           color: CustomColors.orange,
         ),
         Text("8.7/10 IMDb"),
+        SizedBox(
+          width: 10,
+        ),
         Text("3hr 2min")
       ],
     );
