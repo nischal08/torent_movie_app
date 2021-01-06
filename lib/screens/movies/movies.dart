@@ -86,7 +86,7 @@ class Movies extends StatelessWidget {
   Widget _categoryTabs() {
     return GetBuilder(
       init: moviesController,
-      builder: (_) => Container(
+      builder: (moviesController) => Container(
           color: Colors.transparent,
           height: Get.height * .08,
           width: Get.width,
