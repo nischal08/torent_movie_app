@@ -7,4 +7,5 @@ class CustomColors {
 
   static Color lightPurple = Color(0xffA9A9D2);
   static Color orange = Color(0xffDE3822);
+  static Color shadow=Colors.grey.shade300;
 }
