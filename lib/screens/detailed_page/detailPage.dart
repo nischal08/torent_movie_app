@@ -1,10 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:torrent_movie/model/listmovies.dart';
+import 'package:torrent_movie/model/movie_details.dart' as md;
 import 'package:torrent_movie/screens/detailed_page/cover_with_title.dart';
+import 'package:torrent_movie/screens/detailed_page/detailController.dart';
 import 'package:torrent_movie/utils/custom_color.dart';
 
 class DetailPage extends StatelessWidget {
+  final Movie movie;
+  DetailPage(this.movie);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,26 +18,104 @@ class DetailPage extends StatelessWidget {
   }
 
   Widget _body() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: MediaQuery.of(Get.context).padding.top,
-        ),
-        _coverWithTitle(),
-        SizedBox(
-          height: 10.0,
-        ),
-        _rating(),
-        _details(),
-        _storyLine(),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: MediaQuery.of(Get.context).padding.top,
+          ),
+          CoverWithTitle(
+            movie,
+          ),
+          SizedBox(
+            height: 10.0,
+          ),
+          _rating(),
+          _details(),
+          _storyLine(),
+          _fullCast()
+        ],
+      ),
+    );
+  }
+
+  Widget _fullCast() {
+    return GetBuilder(
+        init: DetailController(movie.id),
+        builder: (controller) => Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Full Cast",
+                    style: TextStyle(
+                      color: CustomColors.primaryBlue,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  _castList(controller),
+                ],
+              ),
+            ));
+  }
+
+  Widget _castList(DetailController controller) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: controller.casts.length == 0
+            ? [
+                Center(
+                  child: CircularProgressIndicator(),
+                )
+              ]
+            : [
+                for (var eachCast in controller.casts) _eachCastMember(eachCast)
+              ],
+      ),
+    );
+  }
+
+  Widget _eachCastMember(md.Cast cast) {
+    double imageSize = Get.width * .15;
+    return Padding(
+      padding: const EdgeInsets.only(right: 10.0),
+      child: Column(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.network(
+              cast.urlSmallImage ??
+                  "https://png.pngtree.com/png-vector/20190804/ourlarge/pngtree-avatar-male-people-profile-blue-icon-on-abstract-cloud-backgr-png-image_1650274.jpg",
+              height: imageSize,
+              width: imageSize,
+              fit: BoxFit.cover,
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            cast.name,
+            style: TextStyle(
+                color: CustomColors.primaryBlue, fontWeight: FontWeight.bold),
+          ),
+          Text(
+            cast.characterName,
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _storyLine() {
-    final _description =
-        "As Hiccup fulfills his dreams of creating a peaceful dragon utopia, Toothless' discovery of an untamed, elusive mate draws the Night Fury away. When danger mounts at home and Hiccup's reign as village chief is tested, both dragon and rider must make impossible decisions to save their kind. Written by JC Jamison";
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -49,17 +132,11 @@ class DetailPage extends StatelessWidget {
             height: 15,
           ),
           Text(
-            _description,
+            movie.descriptionFull,
             style: TextStyle(color: Colors.grey.shade600),
           )
         ],
       ),
-    );
-  }
-
-  Widget _coverWithTitle() {
-    return Stack(
-      children: [CoverWithTitle()],
     );
   }
 
@@ -88,10 +165,9 @@ class DetailPage extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _eachDetailText(label: "Release date: ", content: "January 9, 2019"),
-          _eachDetailText(label: "Director: ", content: "Dean DeBlois"),
-          _eachDetailText(
-              label: "Writers: ", content: "Dean BeBlois, Cressida Cowell"),
+          _eachDetailText(label: "Release date: ", content: "${movie.year}"),
+          _eachDetailText(label: "Director: ", content: ""),
+          _eachDetailText(label: "Writers: ", content: ""),
         ],
       ),
     );
@@ -124,9 +200,9 @@ class DetailPage extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(15),
       child: Image.network(
-        "https://static1.cbrimages.com/wordpress/wp-content/uploads/2019/02/how-to-train-your-dragon-hidden-world-header.jpg",
+        movie.largeCoverImage,
         height: Get.height * .3,
-        width: Get.width * .3,
+        width: Get.width * .35,
         fit: BoxFit.cover,
       ),
     );
@@ -138,17 +214,19 @@ class DetailPage extends StatelessWidget {
       fontWeight: FontWeight.bold,
       fontSize: 18,
     );
-    return Column(
-      children: [
-        Text(
-          "7.6/10",
-          style: style,
-        ),
-        Text(
-          "IMDb",
-          style: style,
-        ),
-      ],
+    return Center(
+      child: Column(
+        children: [
+          Text(
+            "${movie.rating}/10",
+            style: style,
+          ),
+          Text(
+            "IMDb",
+            style: style,
+          ),
+        ],
+      ),
     );
   }
 }

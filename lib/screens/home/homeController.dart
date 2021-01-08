@@ -4,7 +4,7 @@ import 'package:torrent_movie/screens/movies/movies.dart';
 import 'package:torrent_movie/screens/trending/trending.dart';
 
 class HomeController extends GetxController {
-  int navbarIndex = 1;
+  int navbarIndex = 0;
 
   onNavbarItemTap(index) {
     navbarIndex = index;

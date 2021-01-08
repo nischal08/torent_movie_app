@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:torrent_movie/screens/detailed_page/detailPage.dart';
 
 class TrendingCard extends StatelessWidget {
   List<String> _genreList = ["Sci-fi", "Action", "Comedy", "Horror"];
@@ -10,7 +9,7 @@ class TrendingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(DetailPage());
+        // Get.to(DetailPage());
       },
       child: Padding(
         padding: const EdgeInsets.only(left: 10.0),

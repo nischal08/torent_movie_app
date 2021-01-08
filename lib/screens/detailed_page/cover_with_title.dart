@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:torrent_movie/model/listmovies.dart';
 
 class CoverWithTitle extends StatelessWidget {
+  final Movie movie;
+  CoverWithTitle(this.movie);
   final List<String> _genreList = [
     "Animation",
     "Action",
@@ -88,7 +91,7 @@ class CoverWithTitle extends StatelessWidget {
 
   Widget _review() {
     return Text(
-      "1456 reviews",
+      "No reviews",
       style: TextStyle(
         color: Colors.grey.shade300,
       ),
@@ -97,7 +100,7 @@ class CoverWithTitle extends StatelessWidget {
 
   Widget _duration() {
     return Text(
-      "1h 44min",
+      "${movie.runtime} min",
       style: TextStyle(
         color: Colors.grey.shade300,
       ),
@@ -107,12 +110,12 @@ class CoverWithTitle extends StatelessWidget {
   Widget _title() {
     return RichText(
       text: TextSpan(
-          text: "How To Train Your Dragon: The Hidden World",
+          text: movie.titleEnglish,
           style: TextStyle(
               color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
           children: [
             TextSpan(
-                text: "(2019)",
+                text: "(${movie.year})",
                 style: TextStyle(
                   color: Colors.grey.shade300,
                   fontSize: 14,
@@ -129,7 +132,7 @@ class CoverWithTitle extends StatelessWidget {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
-          children: [for (String genre in _genreList) _eachGenre(genre)],
+          children: [for (String genre in movie.genres) _eachGenre(genre)],
         ),
       ),
     );
@@ -154,8 +157,8 @@ class CoverWithTitle extends StatelessWidget {
         bottomLeft: Radius.circular(20),
       ),
       child: Image.network(
-        "https://static1.cbrimages.com/wordpress/wp-content/uploads/2019/02/how-to-train-your-dragon-hidden-world-header.jpg",
-        fit: BoxFit.cover,
+        movie.mediumCoverImage,
+        fit: BoxFit.fitWidth,
         width: Get.width,
       ),
     );

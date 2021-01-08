@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:torrent_movie/custom_widgets/movie_card.dart';
 import 'package:torrent_movie/custom_widgets/search_bar.dart';
 import 'package:torrent_movie/screens/movies/movies_controller.dart';
 import 'package:torrent_movie/utils/custom_color.dart';
@@ -11,11 +10,12 @@ class Movies extends StatelessWidget {
   final MoviesController moviesController = MoviesController();
 
   final List<String> _categoryList = [
-    "Popular",
-    "Trending",
-    "Recent",
-    "Upcoming",
-    "4k"
+    "Action",
+    "Adventure",
+    "Animation",
+    "Biography",
+    "Comedy",
+    "Crime"
   ];
   @override
   Widget build(BuildContext context) {
@@ -142,16 +142,14 @@ class Movies extends StatelessWidget {
   }
 
   Widget _body() {
-    return SizedBox(
-      height: Get.height * .8 - MediaQuery.of(Get.context).padding.top,
-      width: Get.width,
-      child: ListView(
-        children: [
-          MovieCard(),
-          SizedBox(height: 10),
-          MovieCard(),
-        ],
-      ),
-    );
+    return GetBuilder(
+        builder: (controller) => SizedBox(
+              height: Get.height * .8 - MediaQuery.of(Get.context).padding.top,
+              width: Get.width,
+              child: ListView(
+                children: moviesController.movieList,
+              ),
+            ),
+        init: moviesController);
   }
 }

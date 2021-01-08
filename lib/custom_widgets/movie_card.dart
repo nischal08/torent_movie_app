@@ -1,27 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:torrent_movie/model/listmovies.dart';
+import 'package:torrent_movie/screens/detailed_page/detailPage.dart';
 import 'package:torrent_movie/utils/custom_color.dart';
 
 class MovieCard extends StatelessWidget {
+  final Movie movie;
+  MovieCard(this.movie);
   List<String> _genreList = ["Sci-fi", "Action", "Comedy", "Horror"];
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: Get.height * .30,
-      width: Get.width * .90,
-      // color: Colors.blue,
-      child: Stack(
-        children: [
-          Positioned(
-            left: Get.width * .05,
-            bottom: 0,
-            child: _bottomCard(),
-          ),
-          Positioned(
-            left: Get.width * .05,
-            child: _movieCover(),
-          ),
-        ],
+    return GestureDetector(
+      onTap: () {
+        Get.to(DetailPage(
+          movie,
+        ));
+      },
+      child: Container(
+        margin: EdgeInsets.only(bottom: 20),
+        height: Get.height * .30,
+        width: Get.width * .90,
+        // color: Colors.blue,
+        child: Stack(
+          children: [
+            Positioned(
+              left: Get.width * .05,
+              bottom: 0,
+              child: _bottomCard(),
+            ),
+            Positioned(
+              left: Get.width * .05,
+              child: _movieCover(),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -56,12 +68,17 @@ class MovieCard extends StatelessWidget {
   }
 
   Widget _title() {
-    return Text(
-      'Avengers : End Game',
-      style: TextStyle(
-        color: CustomColors.primaryBlue,
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
+    return SingleChildScrollView(
+      child: SizedBox(
+        width: Get.width * .55,
+        child: Text(
+          movie.titleEnglish,
+          style: TextStyle(
+            color: CustomColors.primaryBlue,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     );
   }
@@ -73,11 +90,11 @@ class MovieCard extends StatelessWidget {
           Icons.star_rounded,
           color: CustomColors.orange,
         ),
-        Text("8.7/10 IMDb"),
+        Text("${movie.rating}/10 IMDb"),
         SizedBox(
           width: 10,
         ),
-        Text("3hr 2min")
+        Text("${movie.runtime} min")
       ],
     );
   }
@@ -90,7 +107,7 @@ class MovieCard extends StatelessWidget {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
-          children: [for (String genre in _genreList) _eachGenre(genre)],
+          children: [for (String genre in movie.genres) _eachGenre(genre)],
         ),
       ),
     );
@@ -121,7 +138,7 @@ class MovieCard extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(15),
       child: Image.network(
-        "https://leonard-photo.com/wp-content/uploads/2015/01/Business-Headshot-Sample-4-300x450.jpg",
+        movie.mediumCoverImage,
         height: Get.height * .25,
         width: Get.width * .30,
         fit: BoxFit.fitHeight,
